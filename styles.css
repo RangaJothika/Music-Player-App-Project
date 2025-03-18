@@ -1,0 +1,91 @@
+/* heading css */
+
+.form-check-reverse {
+  font-size: 22px;
+}
+#heading {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px !important;
+  text-align: center;
+}
+
+/* container css */
+#container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+#allsongs,
+#musiccards,
+#playlists-Container {
+  background-color: rgb(0, 153, 255);
+  border-radius: 15px;
+  box-shadow: 4px 4px 10px grey;
+  padding: 25px;
+}
+
+/* playlists-contanier css */
+#playlists-Container{
+    height:94vh;
+}
+select {
+  background-color: rgb(34, 89, 240);
+  padding: 10px;
+  text-align: center;
+}
+button {
+  background-color: rgb(25, 131, 202);
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius:20px;
+ 
+}
+li{
+    list-style-type: none;
+    margin:15px;
+}
+.songs-collection {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  justify-content: center;
+  gap: 10px;
+}
+.addtoplaylist{
+    display:block;
+    margin:auto;
+}
+.arrow{
+    display:flex;
+    justify-content: center;
+    gap:5px;
+    margin-bottom:15px;
+}
+#playlists form{
+margin-bottom:10px;
+}
+
+/* musiccards container css */
+#musiccards .music-image img{
+    max-width:100%;
+    max-height:60%;
+    display:block;
+    margin:10px auto;
+}
+#musiccards audio{
+    display:block;
+  margin: 20px auto;
+}
+.music-image{
+    background-color:rgb(34, 89, 240);
+    padding:10px;
+    color:white;
+    max-width:100%;
+    max-height:60%;
+    border-radius: 10px;
+}
+.author{
+    font-weight: bold;
+}
