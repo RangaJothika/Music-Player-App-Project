@@ -1,3 +1,4 @@
+// hardcoded json datas
 let AllSongs = [
     {
         Name: "Rise-Of-Dragon",
@@ -37,9 +38,9 @@ let AllSongs = [
     },
 ];
 let CurrentPlayingSongs = 0;
-let CurrentPlayList = []
-let playlistsData = {};
-let Playlists = [];
+let CurrentPlayList = [];//array for storing the songs at current playlist
+let playlistsData = {};//contains each playlist name (as a key) along with its songs (as an array of song indices)
+let Playlists = [];//contains an array with name of playlists
 
 const listOfsongs = document.getElementById("AllSongs");
 
@@ -48,8 +49,9 @@ InitializeFilterList();
 PlaySong(CurrentPlayingSongs);
 themechange();
 
+// theme change
 function themechange() {
-    let themechange = document.querySelector(".form-check-input");
+    let themechange = document.querySelector(".form-check-input");//uses a checkbox internally
     themechange.addEventListener("change", function themechange(e) {
         if (this.checked) {
             document.body.style.backgroundColor = "black";
@@ -57,7 +59,6 @@ function themechange() {
             heading.style.color = "white";
             let theme = document.querySelector(".theme");
             theme.style.color = "white";
-            //    console.log(e.target)
         } else {
             document.body.style.backgroundColor = "white";
             let heading = document.querySelector(".heading");
@@ -68,11 +69,13 @@ function themechange() {
     });
 }
 
+// display all songs at left
 function DisplayAllSongs(genre = "All") {
     listOfsongs.innerHTML = "";
 
     AllSongs.forEach((item, index) => {
-        if (item.Genre == genre || genre == "All") {
+        if (item.Genre == genre || genre == "All") {//if a specific genre is given it has to match the items genre,then 
+            // only that item will be displayed this is used for filtering based on genres
             const li = document.createElement("li");
             li.innerHTML = `
             <button class="${item.Genre}" value="${item.Name}" onClick="PlaySong(${index})">${item.Name} - ${item.Singer}</button>
@@ -82,8 +85,9 @@ function DisplayAllSongs(genre = "All") {
     });
 }
 
+// genre filter list dropdown
 function InitializeFilterList() {
-    const distinctGenres = [...new Set(AllSongs.map((song) => song.Genre))];
+    const distinctGenres = [...new Set(AllSongs.map((song) => song.Genre))];//creates a new set of each genres only
     let FilterList = document.getElementById("genersfilter");
     const Opt = document.createElement("option");
     Opt.textContent = "All";
@@ -95,10 +99,13 @@ function InitializeFilterList() {
     });
 }
 
+// when each filter in dropdown is clicked,this function is called
+// called at onChange prop directly on html file
 function onFilterChanged(event) {
-    DisplayAllSongs(event.target.value);
+    DisplayAllSongs(event.target.value);//event.target is the dom ele triggered the event
 }
 
+// play the clicked song in middle
 function PlaySong(index) {
     let audio = document.querySelector("#musiccards audio");
     let image = document.querySelector("#musiccards img");
@@ -107,16 +114,17 @@ function PlaySong(index) {
     author.innerHTML = `${currentSong.Name} <span> - ${currentSong.Singer}</span>`;
     audio.src = currentSong.Audio;
     image.src = currentSong.Image;
-    CurrentPlayingSongs = index;
+    CurrentPlayingSongs = index;//indices are used to store in currentplaylist array to acces them later
 }
-
+// add to playlist button function
 function AddCurrentSongToPlayList() {
     if (!CurrentPlayList.includes(CurrentPlayingSongs)) {
-        CurrentPlayList.push(CurrentPlayingSongs);
-        DisplayPlaylistSongs();
+        CurrentPlayList.push(CurrentPlayingSongs);//add all current playlist songs indices in array
+        DisplayPlaylistSongs();//display all added songs under current playlist section
     }
 }
 
+// display all added songs under current playlist section as we click add to playlist button
 function DisplayPlaylistSongs() {
     const playlistSongEle = document.getElementById("playlistSongs");
     playlistSongEle.innerHTML = "";
@@ -131,6 +139,7 @@ function DisplayPlaylistSongs() {
     });
 }
 
+// left and right arrows to change songs
 function ChangeSong(isleft) {
     if (isleft) {
         if (CurrentPlayingSongs > 0) {
@@ -152,9 +161,9 @@ function ChangeSong(isleft) {
     }
 }
 
-
+// create a new playlist 
 function CreatePlaylist(event) {
-    event.preventDefault();
+    event.preventDefault();//used to prevent the default action of an event
     let playlistName = document.querySelector("#playlists input");
     if (!(Playlists.includes(playlistName.value)) && playlistName.value != "") {
         Playlists.push(playlistName.value);
@@ -162,6 +171,7 @@ function CreatePlaylist(event) {
     }
 }
 
+// show all the created playlist buttons
 function DisplayPlaylist(playlistname) {
     const playlistEle = document.getElementById("playlistitems");
     let playlist = document.createElement("li");
@@ -173,22 +183,22 @@ function DisplayPlaylist(playlistname) {
     playlistEle.append(playlist);
 };
 
+// add all selected songs in current playlist to a playlist
 function AddingSongsToPlaylist(playlistname) {
-    let currentplaylistdatas = document.querySelectorAll(
-        ".current-playlist-data"
-    );
-    if (currentplaylistdatas.length > 0) {
-        currentplaylistdatas.forEach((data) => {
-            if (!(playlistsData[playlistname].includes(data.textContent)))
-                playlistsData[playlistname].push(data.textContent);
-            data.remove();
+    const playlistSongEle = document.getElementById("playlistSongs");
+    if (CurrentPlayList.length > 0) {
+        CurrentPlayList.forEach((index) => {
+            if (!(playlistsData[playlistname].includes(index)))
+                playlistsData[playlistname].push(AllSongs[index].Name);
         });
-        // console.log(playlistsData[playlistname]);
-        // console.log("Array Updated!");
+        playlistSongEle.innerHTML = "";//to remove all playlists name from current playlists section
+        CurrentPlayList = []; // make it empty so that for next playlist the current playlist doesnto contain the songs 
+        // of prev playlists
     } else {
         if (playlistsData[playlistname].length > 0) {
+            playlistSongEle.innerHTML = "";
             playlistsData[playlistname].forEach((data) => {
-                const playlistSongEle = document.getElementById("playlistSongs");
+               
                 let currentplaylistdata = document.createElement("li");
                 currentplaylistdata.textContent = data;
                 currentplaylistdata.style.fontWeight = "bold";
